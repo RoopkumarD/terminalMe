@@ -1,8 +1,8 @@
 <script lang="ts">
   let command = "";
   $: if (command[command.length - 1] === " ") {
-    command.replace(" ", "&nbsp;");
-    console.log(command);
+    command = command.slice(0, command.length - 1);
+    command = command + "\u00A0";
   }
 </script>
 
@@ -15,15 +15,13 @@
       <p><span class="text-amber-400">&gt;</span> Hello Ji mera naam roop</p>
     </div>
     <div id="command" class="">
-      <div id="cli" class="">
-        <p class="break-all">
-          <span class="m-0 p-0 text-amber-400">&gt;&nbsp;</span>{command}<input
-            bind:value={command}
-            type="text"
-            class="m-0 p-0 outline-none z-50 w-2 h-min bg-white text-white"
-          />
-        </p>
-      </div>
+      <p class="break-all">
+        <span class="m-0 p-0 text-amber-400">&gt;&nbsp;</span>{command}<input
+          bind:value={command}
+          type="text"
+          class="m-0 p-0 outline-none z-50 w-2 h-min bg-white text-white"
+        />
+      </p>
     </div>
   </div>
 </div>
