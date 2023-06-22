@@ -42,12 +42,13 @@
 
       <div id="command">
         <p class="break-all">
-          <span class="m-0 p-0 text-amber-400">&gt;&nbsp;</span>{command}<input
-            bind:value={command}
-            bind:this={cli}
-            type="text"
-            class="m-0 p-0 outline-none z-50 w-2 h-min bg-white text-white"
-          />
+          <!--   <span class="m-0 p-0 text-amber-400">&gt;&nbsp;</span>{command}<input -->
+          <!--     bind:value={command} -->
+          <!--     bind:this={cli} -->
+          <!--     type="text" -->
+          <!--     class="m-0 p-0 outline-none z-50 w-2 h-min bg-white text-white" -->
+          <!--   /> -->
+          <!-- </p> -->
         </p>
       </div>
     {:else if !show}
