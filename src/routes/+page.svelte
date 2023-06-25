@@ -2,26 +2,29 @@
   import { onMount } from "svelte";
 
   let command = "";
+  let cli: HTMLInputElement;
 
   let show = false;
-
-  $: if (command[command.length - 1] === " ") {
-    command = command.slice(0, command.length - 1);
-    command = command + "\u00A0";
-  }
-
-  function handleKeydown(event: KeyboardEvent) {
-    command += event.key;
-  }
 
   onMount(() => {
     show = true;
   });
 </script>
 
-<svelte:window on:keydown={handleKeydown} />
+<svelte:window
+  on:keydown={() => {
+    cli.focus();
+  }}
+/>
 
-<div id="container" class="min-h-full flex justify-center items-center">
+<input
+  type="text"
+  class="h-0 w-0 opacity-0 absolute top-0"
+  bind:value={command}
+  bind:this={cli}
+/>
+
+<div id="container" class="h-full flex justify-center items-center">
   <div
     id="terminal"
     class="bg-zinc-950 h-96 w-1/2 overflow-y-auto font-jetBrain text-white text-xl p-4"
@@ -34,9 +37,12 @@
       </div>
 
       <div id="command" class="">
-        <p class="break-all">
-          <span class="m-0 p-0 text-amber-400">&gt;&nbsp;</span>{command}<span
-            class="w-2 h-6 bg-white inline-block"
+        <p class="whitespace-break-spaces break-all p-0">
+          <!-- Here, input is not input for command but used as inline element -->
+          <!-- to display terminal toggle. -->
+          <span class="m-0 p-0 text-amber-400">&gt;&nbsp;</span>{command}<input
+            class="bg-white outline-none h-6 w-2"
+            readonly
           />
         </p>
       </div>
