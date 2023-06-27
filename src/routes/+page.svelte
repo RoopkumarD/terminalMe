@@ -10,28 +10,38 @@
   let values = [
     {
       name: "Me",
-      values: "I am powerful",
-      type: "directory",
-      folder: [
+      values: [
+        // values means inside that thing
         {
           name: "Inside Me",
-          values: "Don't be dirty minded",
+          values: "Don't be uncool", // for file, value is content inside file
           type: "file",
         },
+        {
+          name: "dummy folder",
+          values: [], // thus for folder value is things inside folder
+          type: "directory",
+        },
       ],
+      type: "directory",
     },
     {
       name: "Projects",
-      values: "Firefox extension",
       type: "directory",
     },
     {
       name: "Hello JI mera naam roop",
-      values: "timepass",
       type: "directory",
     },
   ];
   let currentDirectory = values;
+
+  /*
+   Here, i don't have to worrry about server not able to interpret
+   document method, as until show == true which will be when onMounted
+   the component, thus these function will be only available when the
+   component is Mounted.
+  */
 
   function addCommand() {
     let p = document.createElement("p");
