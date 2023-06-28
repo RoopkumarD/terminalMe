@@ -13,12 +13,12 @@
       values: [
         // values means inside that thing
         {
-          name: "Inside Me",
+          name: "'Inside Me'",
           values: "Don't be uncool", // for file, value is content inside file
           type: "file",
         },
         {
-          name: "dummy folder",
+          name: "'dummy folder'",
           values: [], // thus for folder value is things inside folder
           type: "directory",
         },
@@ -27,14 +27,55 @@
     },
     {
       name: "Projects",
-      type: "directory",
+      values: "None",
+      type: "file",
     },
     {
-      name: "Hello JI mera naam roop",
+      name: "'Hello JI mera naam roop'",
+      values: "None",
+      type: "file",
+    },
+    {
+      name: "'I want power'",
+      values: [
+        {
+          name: "'More Power'",
+          values: "Kese ?",
+          type: "file",
+        },
+        {
+          name: "emerald",
+          values: "kaizo",
+          type: "file",
+        },
+        {
+          name: "roop",
+          values: [
+            {
+              name: "age",
+              values: "19",
+              type: "file",
+            },
+            {
+              name: "birth",
+              values: "2003",
+              type: "file",
+            },
+          ],
+          type: "directory",
+        },
+        {
+          name: "penname",
+          values: "rkad",
+          type: "file",
+        },
+      ],
       type: "directory",
     },
   ];
-  let currentDirectory = values;
+
+  type directoryArr = Record<string, any>;
+  let currentDirectory: directoryArr[] = values;
 
   /*
    Here, i don't have to worrry about server not able to interpret
@@ -53,50 +94,106 @@
     p.textContent = command;
     p.insertBefore(span, p.firstChild);
     content.appendChild(p);
-  }
-
-  function spaceInString(str: string) {
-    for (let i of str) {
-      if (i === " ") {
-        return true;
-      }
-    }
-    return false;
+    return;
   }
 
   function lsCommand() {
     let p = document.createElement("p");
     p.classList.add("text-orange-500");
-    p.classList.add("whitespace-break-spaces");
-    p.classList.add("break-all");
-    for (let element of values) {
+    let currentDirectoryLastIndex = currentDirectory.length - 1;
+    for (let element of currentDirectory) {
       let span = document.createElement("span");
-      let check = spaceInString(element.name);
-      if (check === true) {
-        span.textContent = "'" + element.name + "'" + "   ";
-      } else if (check === false) {
-        span.textContent = element.name + "   ";
+      span.textContent = element.name;
+
+      if (currentDirectory[currentDirectoryLastIndex] !== element) {
+        span.classList.add("mr-8");
       }
+
+      if (element.type === "file") {
+        span.classList.add("text-white");
+      }
+
       p.appendChild(span);
     }
     content.appendChild(p);
-  }
-
-  function dirAvailable(name: string) {
-    for (let element of currentDirectory) {
-      if (element.name === name && element.type === "directory") {
-        return true;
-      }
-    }
-    return false;
+    return;
   }
 
   function cdCommand() {
-    let check = dirAvailable(command.substring(3));
-    if (check === true) {
-      currentDirectory = command.substring(3);
-    } else if (check === false) {
+    let nameCommand = command.substring(3);
+    console.log(nameCommand, command);
+    for (let element of currentDirectory) {
+      console.log(element.name, nameCommand);
+      if (element.name === nameCommand && element.type === "directory") {
+        currentDirectory = element.values;
+        console.log(currentDirectory);
+        return;
+      }
     }
+    console.log("not found");
+    let p = document.createElement("p");
+    p.textContent = nameCommand + " not found!";
+    p.classList.add("text-red-500");
+    p.classList.add("break-all");
+    content.appendChild(p);
+    return;
+  }
+
+  function cdDotCommand(start: directoryArr[]) {
+    if (currentDirectory === values) {
+      console.log("currentDirectory == values");
+      return;
+    }
+
+    if (typeof start === "string") {
+      console.log("file de diya");
+      return;
+    }
+
+    for (let element of start) {
+      if (element.values === currentDirectory) {
+        console.log(element.values, currentDirectory);
+        currentDirectory = start;
+        return;
+      }
+      console.log(element);
+      cdDotCommand(element.values);
+    }
+
+    return;
+  }
+
+  function clearCommand() {
+    while (content.firstChild) {
+      content.firstChild.remove();
+    }
+  }
+
+  function commandNotFound() {
+    let p = document.createElement("p");
+    p.textContent = "command not found";
+    p.classList.add("text-green-400");
+    content.appendChild(p);
+    return;
+  }
+
+  function catCommand() {
+    let nameCat = command.substring(4);
+    for (let element of currentDirectory) {
+      if (element.name === nameCat && element.type === "file") {
+        let p = document.createElement("p");
+        p.textContent = element.values;
+        p.classList.add("text-white");
+        p.classList.add("break-all");
+        content.appendChild(p);
+        return;
+      }
+    }
+    let p = document.createElement("p");
+    p.textContent = "file not found";
+    p.classList.add("text-red-500");
+    content.appendChild(p);
+    return;
   }
 
   function pressKey(event: KeyboardEvent) {
@@ -104,8 +201,16 @@
       addCommand();
       if (command === "ls") {
         lsCommand();
-      } else if (command === "cd") {
+      } else if (command.substring(0, 3) === "cd " && command !== "cd ..") {
         cdCommand();
+      } else if (command === "cd ..") {
+        cdDotCommand(values);
+      } else if (command === "clear") {
+        clearCommand();
+      } else if (command.substring(0, 4) === "cat ") {
+        catCommand();
+      } else {
+        commandNotFound();
       }
       command = "";
     } else {
@@ -133,7 +238,7 @@
     class="bg-zinc-950 h-96 w-1/2 overflow-y-auto font-jetBrain text-white text-xl p-4"
   >
     {#if show}
-      <div id="content" bind:this={content}>
+      <div id="content" class="m-0 p-0" bind:this={content}>
         <p>
           <span class="text-amber-400">&gt;&nbsp;</span>Hello Ji mera naam roop
         </p>
