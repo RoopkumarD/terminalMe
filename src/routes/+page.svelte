@@ -300,6 +300,11 @@
           the 'help' command to learn about all the available commands that you
           can use right now.
         </p>
+        <p>
+          This terminal src code: <a class="underline" target="_blank" href="#"
+            >github/terminalMe</a
+          >
+        </p>
       </div>
 
       <div id="command" class="">
