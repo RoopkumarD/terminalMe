@@ -6,71 +6,95 @@
   let content: HTMLDivElement;
 
   let show = false;
+  let screen = false;
 
-  let values = [
+  const values = [
     {
-      name: "Me",
-      values: [
-        // values means inside that thing
-        {
-          name: "'Inside Me'",
-          values: "Don't be uncool", // for text, value is content inside text
-          type: "text",
-        },
-        {
-          name: "'dummy folder'",
-          values: [], // thus for folder value is things inside folder
-          type: "directory",
-        },
-      ],
+      name: "whoami.txt",
+      type: "text",
+      values:
+        "I'm currently a student at IITM, doing my BSc degree. I'm living in Pune, Maharashtra, and I'm just trying to learn and create cool stuff!",
+    },
+    {
+      name: "education.txt",
+      type: "text",
+      values: `Primary and High School:
+        City International School -> primary education
+        Nowrosjee Wadia -> secondary education
+
+        Current:
+        Pursuing BSC degree from IITM
+      `,
+    },
+    {
+      name: "email.txt",
+      type: "text",
+      values: "roopkumards@gmail.com",
+    },
+    {
+      name: "projects",
       type: "directory",
-    },
-    {
-      name: "Projects",
-      values: "None",
-      type: "text",
-    },
-    {
-      name: "'Hello JI mera naam roop'",
-      values: "None",
-      type: "text",
-    },
-    {
-      name: "'I want power'",
       values: [
         {
-          name: "'More Power'",
-          values: "Kese ?",
+          name: "TSTL.txt",
           type: "text",
+          values:
+            "I've created a browser extension that simplifies sharing text and links between your computer and Android device. This project seamlessly syncs shared content to your Todoist account, allowing for easy management and access across devices. With this extension, you can effortlessly send links and text between your computer and phone, eliminating the need for additional apps or services.",
         },
         {
-          name: "emerald",
-          values: "kaizo",
+          name: "terminalMe.txt",
           type: "text",
-        },
-        {
-          name: "roop",
-          values: [
-            {
-              name: "age",
-              values: "19",
-              type: "text",
-            },
-            {
-              name: "birth",
-              values: "2003",
-              type: "text",
-            },
-          ],
-          type: "directory",
-        },
-        {
-          name: "penname",
-          values: "rkad",
-          type: "text",
+          values:
+            "This is the one you're currently using. I created this out of my love for the terminal.",
         },
       ],
-      type: "directory",
+    },
+    {
+      name: "socials.txt",
+      type: "text",
+      values: `Here are my social links
+        1. GitHub - https://github.com/RoopkumarD
+        2. Twitter - https://twitter.com/Roopkd_
+        `,
+    },
+    {
+      name: "credits.txt",
+      type: "text",
+      values: `I am grateful to these amazing individuals for generously sharing their work for free, which has enabled me to create the very thing you are using.
+        1. Sveltekit - https://kit.svelte.dev/ 
+        2. TailwindCSS - https://tailwindcss.com/
+        3. Terminal Colorscheme - https://color.smyck.org/ 
+        4. Background - https://www.instagram.com/genji_fj_512/
+`,
+    },
+  ];
+
+  const availableCommands = [
+    {
+      name: "help",
+      whatItdoes: "to check available commands",
+    },
+    {
+      name: "ls",
+      whatItdoes: "to show the content of directory",
+    },
+    {
+      name: "cd [directory]",
+      whatItdoes: `to move to that specific directory
+      Usage: cd social or cd 'My Education'`,
+    },
+    {
+      name: "cd ..",
+      whatItdoes: "to move back to parent directory of current directory",
+    },
+    {
+      name: "clear",
+      whatItdoes: "to clear the terminal screen",
+    },
+    {
+      name: "cat [txt file]",
+      whatItdoes: `to read content of txt file
+      Usage: cat twitter.txt`,
     },
   ];
 
@@ -88,7 +112,7 @@
     let p = document.createElement("p");
     let span = document.createElement("span");
     span.textContent = "> ";
-    span.classList.add("text-amber-400");
+    span.classList.add("text-folderColor");
     p.classList.add("whitespace-break-spaces");
     p.classList.add("break-all");
     p.textContent = command;
@@ -99,41 +123,38 @@
 
   function lsCommand() {
     let p = document.createElement("p");
-    p.classList.add("text-orange-500");
+    p.classList.add("text-folderColor");
     let currentDirectoryLastIndex = currentDirectory.length - 1;
     for (let element of currentDirectory) {
       let span = document.createElement("span");
       span.textContent = element.name;
 
       if (currentDirectory[currentDirectoryLastIndex] !== element) {
-        span.classList.add("mr-8");
+        span.classList.add("mr-6");
       }
 
       if (element.type === "text") {
-        span.classList.add("text-white");
+        span.classList.add("text-textColor");
       }
 
       p.appendChild(span);
     }
+    p.classList.add("break-all");
     content.appendChild(p);
     return;
   }
 
   function cdCommand() {
     let nameCommand = command.substring(3);
-    console.log(nameCommand, command);
     for (let element of currentDirectory) {
-      console.log(element.name, nameCommand);
       if (element.name === nameCommand && element.type === "directory") {
         currentDirectory = element.values;
-        console.log(currentDirectory);
         return;
       }
     }
-    console.log("not found");
     let p = document.createElement("p");
     p.textContent = nameCommand + " not found!";
-    p.classList.add("text-red-500");
+    p.classList.add("text-commandErrorColor");
     p.classList.add("break-all");
     content.appendChild(p);
     return;
@@ -141,22 +162,18 @@
 
   function cdDotCommand(start: directoryArr[]) {
     if (currentDirectory === values) {
-      console.log("currentDirectory == values");
       return;
     }
 
     if (typeof start === "string") {
-      console.log("text de diya");
       return;
     }
 
     for (let element of start) {
       if (element.values === currentDirectory) {
-        console.log(element.values, currentDirectory);
         currentDirectory = start;
         return;
       }
-      console.log(element);
       cdDotCommand(element.values);
     }
 
@@ -171,8 +188,8 @@
 
   function commandNotFound() {
     let p = document.createElement("p");
-    p.textContent = "command not found";
-    p.classList.add("text-green-400");
+    p.textContent = "command not found: " + command;
+    p.classList.add("text-commandErrorColor");
     content.appendChild(p);
     return;
   }
@@ -183,15 +200,41 @@
       if (element.name === nameCat && element.type === "text") {
         let p = document.createElement("p");
         p.textContent = element.values;
-        p.classList.add("text-white");
-        p.classList.add("break-all");
+        p.classList.add("text-textColor");
+        // p.classList.add("break-all");
+        p.classList.add("whitespace-pre-line");
         content.appendChild(p);
         return;
       }
     }
     let p = document.createElement("p");
-    p.textContent = "text not found";
-    p.classList.add("text-red-500");
+    p.textContent = nameCat + " not found";
+    p.classList.add("text-commandErrorColor");
+    content.appendChild(p);
+    return;
+  }
+
+  function helpCommand() {
+    let div = document.createElement("div");
+    for (let element of availableCommands) {
+      let p = document.createElement("p");
+      let span1 = document.createElement("span");
+      let span2 = document.createElement("span");
+      span1.textContent = element.name;
+      span1.classList.add("text-commandColor");
+      span2.textContent = "  -> " + element.whatItdoes;
+      p.appendChild(span1);
+      p.appendChild(span2);
+      p.classList.add("whitespace-pre-line");
+      div.appendChild(p);
+    }
+    content.appendChild(div);
+    return;
+  }
+
+  function cdUsageMistake() {
+    let p = document.createElement("p");
+    p.textContent = "Usage: cd [directory name]";
     content.appendChild(p);
     return;
   }
@@ -203,12 +246,16 @@
         lsCommand();
       } else if (command.substring(0, 3) === "cd " && command !== "cd ..") {
         cdCommand();
+      } else if (command === "cd") {
+        cdUsageMistake();
       } else if (command === "cd ..") {
         cdDotCommand(values);
       } else if (command === "clear") {
         clearCommand();
       } else if (command.substring(0, 4) === "cat ") {
         catCommand();
+      } else if (command === "help") {
+        helpCommand();
       } else {
         commandNotFound();
       }
@@ -219,6 +266,11 @@
   }
 
   onMount(() => {
+    // if (window.innerWidth > 1024) {
+    //   show = true;
+    // } else {
+    //   screen = true;
+    // }
     show = true;
   });
 </script>
@@ -232,15 +284,21 @@
   bind:this={cli}
 />
 
-<div id="container" class="h-full flex justify-center items-center">
+<!-- {#if screen == false} -->
+<div
+  id="container"
+  class="bg-[url('/background.webp')] bg-cover h-full flex justify-center items-center"
+>
   <div
     id="terminal"
-    class="bg-zinc-950 h-96 w-1/2 overflow-y-auto font-jetBrain text-white text-xl p-4"
+    class="bg-backgroundColor shadow-2xl h-96 w-1/2 overflow-y-auto font-jetBrain text-textColor text-lg p-4"
   >
     {#if show}
       <div id="content" class="m-0 p-0" bind:this={content}>
         <p>
-          <span class="text-amber-400">&gt;&nbsp;</span>Hello Ji mera naam roop
+          <span class="text-folderColor">&gt;&nbsp;</span>Hey, this is Roop. Use
+          the 'help' command to learn about all the available commands that you
+          can use right now.
         </p>
       </div>
 
@@ -248,10 +306,8 @@
         <p class="whitespace-break-spaces break-all p-0">
           <!-- Here, input is not input for command but used as inline element -->
           <!-- to display terminal toggle. -->
-          <span class="m-0 p-0 text-amber-400">&gt;&nbsp;</span>{command}<input
-            class="bg-white outline-none h-6 w-2"
-            readonly
-          />
+          <span class="m-0 p-0 text-folderColor">&gt;&nbsp;</span
+          >{command}<input class="bg-white outline-none h-6 w-2" readonly />
         </p>
       </div>
     {:else if !show}
@@ -259,3 +315,6 @@
     {/if}
   </div>
 </div>
+<!-- {:else if screen == true} -->
+<!--   <div>Please</div> -->
+<!-- {/if} -->
