@@ -14,8 +14,8 @@
         // values means inside that thing
         {
           name: "'Inside Me'",
-          values: "Don't be uncool", // for file, value is content inside file
-          type: "file",
+          values: "Don't be uncool", // for text, value is content inside text
+          type: "text",
         },
         {
           name: "'dummy folder'",
@@ -28,12 +28,12 @@
     {
       name: "Projects",
       values: "None",
-      type: "file",
+      type: "text",
     },
     {
       name: "'Hello JI mera naam roop'",
       values: "None",
-      type: "file",
+      type: "text",
     },
     {
       name: "'I want power'",
@@ -41,12 +41,12 @@
         {
           name: "'More Power'",
           values: "Kese ?",
-          type: "file",
+          type: "text",
         },
         {
           name: "emerald",
           values: "kaizo",
-          type: "file",
+          type: "text",
         },
         {
           name: "roop",
@@ -54,12 +54,12 @@
             {
               name: "age",
               values: "19",
-              type: "file",
+              type: "text",
             },
             {
               name: "birth",
               values: "2003",
-              type: "file",
+              type: "text",
             },
           ],
           type: "directory",
@@ -67,7 +67,7 @@
         {
           name: "penname",
           values: "rkad",
-          type: "file",
+          type: "text",
         },
       ],
       type: "directory",
@@ -109,7 +109,7 @@
         span.classList.add("mr-8");
       }
 
-      if (element.type === "file") {
+      if (element.type === "text") {
         span.classList.add("text-white");
       }
 
@@ -146,7 +146,7 @@
     }
 
     if (typeof start === "string") {
-      console.log("file de diya");
+      console.log("text de diya");
       return;
     }
 
@@ -180,7 +180,7 @@
   function catCommand() {
     let nameCat = command.substring(4);
     for (let element of currentDirectory) {
-      if (element.name === nameCat && element.type === "file") {
+      if (element.name === nameCat && element.type === "text") {
         let p = document.createElement("p");
         p.textContent = element.values;
         p.classList.add("text-white");
@@ -190,7 +190,7 @@
       }
     }
     let p = document.createElement("p");
-    p.textContent = "file not found";
+    p.textContent = "text not found";
     p.classList.add("text-red-500");
     content.appendChild(p);
     return;
