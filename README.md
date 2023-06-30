@@ -1,38 +1,9 @@
-# create-svelte
+## TerminalMe
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+My take on a web terminal using SvelteKit.
 
-## Creating a project
+Currently, it serves as a portfolio for me. As for the future, let's wait and see, taking it step by step.
 
-If you're seeing this, you've probably already done this step. Congrats!
+### Reason for making this:
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+It has been 6 months since I shifted from Windows to Linux. Initially, I had some resistance to using the terminal. All the commands seemed complex to me. However, with time, I started using it regularly, and all the worries and fears faded away, leaving only love for it. When I used Windows, I disliked how long it took for my file explorer to load. But when it comes to using the terminal, I can browse directories and files quickly. This is just one example, but I have grown to love Linux a lot, especially its use of configuration files and everything else. This terminal is just my attempt at creating my own terminal. However, I didn't want to create a fully-fledged terminal all at once, so I decided to start with a portfolio-type terminal. To be honest, I'm not satisfied with the code I have written so far, but since it's a start, I'll leave it as it is for now and gradually improve this terminal over time.
