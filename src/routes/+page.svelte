@@ -6,7 +6,6 @@
   let content: HTMLDivElement;
 
   let show = false;
-  let screen = false;
 
   const values = [
     {
@@ -264,14 +263,14 @@
       cli.focus();
     }
   }
+  let screen = false;
 
   onMount(() => {
-    // if (window.innerWidth > 1024) {
-    //   show = true;
-    // } else {
-    //   screen = true;
-    // }
-    show = true;
+    if (window.innerWidth < 1024) {
+      screen = true;
+    } else {
+      show = true;
+    }
   });
 </script>
 
@@ -284,7 +283,6 @@
   bind:this={cli}
 />
 
-<!-- {#if screen == false} -->
 <div
   id="container"
   class="bg-[url('/background.webp')] bg-cover h-full flex justify-center items-center"
@@ -293,6 +291,12 @@
     id="terminal"
     class="bg-backgroundColor shadow-2xl h-96 w-1/2 overflow-y-auto font-jetBrain text-textColor text-lg p-4"
   >
+    {#if screen}
+      <p>
+        Apologies, but this terminal is not compatible with mobile phones.
+        Kindly access it using a desktop device.
+      </p>
+    {/if}
     {#if show}
       <div id="content" class="m-0 p-0" bind:this={content}>
         <p>
@@ -301,8 +305,10 @@
           can use right now.
         </p>
         <p>
-          This terminal src code: <a class="underline" target="_blank" href="#"
-            >github/terminalMe</a
+          This project src code: <a
+            class="underline"
+            target="_blank"
+            href="https://github.com/RoopkumarD/terminalMe">github/terminalMe</a
           >
         </p>
       </div>
@@ -315,11 +321,8 @@
           >{command}<input class="bg-white outline-none h-6 w-2" readonly />
         </p>
       </div>
-    {:else if !show}
+    {:else if !show && !screen}
       <p>Loading...</p>
     {/if}
   </div>
 </div>
-<!-- {:else if screen == true} -->
-<!--   <div>Please</div> -->
-<!-- {/if} -->
