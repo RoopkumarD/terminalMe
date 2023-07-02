@@ -144,19 +144,27 @@
   }
 
   function cdCommand() {
-    let nameCommand = command.substring(3);
-    for (let element of currentDirectory) {
-      if (element.name === nameCommand && element.type === "directory") {
-        currentDirectory = element.values;
-        return;
+    if (command === "cd") {
+      currentDirectory = values;
+      return;
+    } else if (command.substring(0, 3) === "cd ") {
+      let nameCommand = command.substring(3);
+      for (let element of currentDirectory) {
+        if (element.name === nameCommand && element.type === "directory") {
+          currentDirectory = element.values;
+          return;
+        }
       }
+      let p = document.createElement("p");
+      p.textContent = nameCommand + " not found!";
+      p.classList.add("text-commandErrorColor");
+      p.classList.add("break-all");
+      content.appendChild(p);
+      return;
+    } else {
+      commandNotFound();
+      return;
     }
-    let p = document.createElement("p");
-    p.textContent = nameCommand + " not found!";
-    p.classList.add("text-commandErrorColor");
-    p.classList.add("break-all");
-    content.appendChild(p);
-    return;
   }
 
   function cdDotCommand(start: directoryArr[]) {
@@ -231,22 +239,13 @@
     return;
   }
 
-  function cdUsageMistake() {
-    let p = document.createElement("p");
-    p.textContent = "Usage: cd [directory name]";
-    content.appendChild(p);
-    return;
-  }
-
   function pressKey(event: KeyboardEvent) {
     if (event.key == "Enter") {
       addCommand();
       if (command === "ls") {
         lsCommand();
-      } else if (command.substring(0, 3) === "cd " && command !== "cd ..") {
+      } else if (command.substring(0, 2) === "cd" && command !== "cd ..") {
         cdCommand();
-      } else if (command === "cd") {
-        cdUsageMistake();
       } else if (command === "cd ..") {
         cdDotCommand(values);
       } else if (command === "clear") {
