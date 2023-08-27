@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from "svelte";
+  import { afterUpdate, beforeUpdate, onMount } from "svelte";
 
   let command = "";
   let cli: HTMLInputElement;
@@ -271,6 +271,23 @@
       show = true;
     }
   });
+
+  let terminalDiv: HTMLDivElement;
+  let autoscroll = false;
+
+  beforeUpdate(() => {
+    if (terminalDiv) {
+      const scrollableDistance =
+        terminalDiv.scrollHeight - terminalDiv.offsetHeight;
+      autoscroll = terminalDiv.scrollTop < scrollableDistance - 20;
+    }
+  });
+
+  afterUpdate(() => {
+    if (autoscroll) {
+      terminalDiv.scrollTo(0, terminalDiv.scrollHeight);
+    }
+  });
 </script>
 
 <svelte:window on:keydown={pressKey} />
@@ -289,6 +306,7 @@
   <div
     id="terminal"
     class="bg-backgroundColor shadow-2xl h-96 w-1/2 overflow-y-auto font-jetBrain text-textColor text-lg p-4"
+    bind:this={terminalDiv}
   >
     {#if screen}
       <p>
